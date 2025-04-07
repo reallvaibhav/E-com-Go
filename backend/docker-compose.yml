@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   api-gateway:
     build:
@@ -8,6 +10,8 @@ services:
     depends_on:
       - inventory-service
       - order-service
+    networks:
+      - api-network
 
   inventory-service:
     build:
@@ -15,6 +19,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+    networks:
+      - api-network
 
   order-service:
     build:
@@ -22,3 +28,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8082"
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
