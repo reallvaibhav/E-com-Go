@@ -1,10 +1,10 @@
 # backend/inventory/Dockerfile
-FROM golang:1.20
+FROM golang:1.21
 
 WORKDIR /app
 COPY . .
 RUN go mod tidy
-RUN go build -o inventory
+RUN go build -o inventory-service
 
 EXPOSE 8081
-CMD ["./inventory"]
+CMD ["./inventory-service"]
