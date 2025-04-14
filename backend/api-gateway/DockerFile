@@ -1,18 +1,29 @@
-FROM golang:1.23.0
+FROM golang:1.24.1-alpine AS builder
 
+# Enable Go modules
+ENV CGO_ENABLED=0 GO111MODULE=on
 
 WORKDIR /app
+
+# Copy go.mod and go.sum first to leverage Docker caching
 COPY go.mod go.sum ./
-RUN go mod tidy
 
-COPY . ./
-RUN go build -o api-gateway
+# Download dependencies
+RUN go mod download
 
-# Final stage
-FROM debian:bullseye-slim
+# Copy the rest of the application code
+COPY . .
 
-WORKDIR /root/
+# Build the application binary
+RUN go build -o api-gateway ./cmd
+
+# Final lightweight image
+FROM alpine:latest
+
+WORKDIR /app
+
+# Copy the binary from the builder
 COPY --from=builder /app/api-gateway .
 
-EXPOSE 8080
+# Run the app
 CMD ["./api-gateway"]

@@ -1,7 +1,5 @@
-# Ignore unnecessary files
+# Example .dockerignore (adjust as needed)
 .git
-**/node_modules
-**/Dockerfile
-**/docker-compose.yml
+**/vendor/
 **/.env
-**/.gitignore
+**/bin/

@@ -1,18 +1,22 @@
 package main
 
 import (
-	"order-service/internal/order/handler"
-	"order-service/internal/order/repository"
-	"order-service/internal/order/usecase"
-
 	"github.com/gin-gonic/gin"
+	"github.com/reallvaibhav/E-com-Go/backend/order-service/internal/order/handler"
+	"github.com/reallvaibhav/E-com-Go/backend/order-service/internal/order/repository"
+	"github.com/reallvaibhav/E-com-Go/backend/order-service/internal/order/usecase"
 )
 
 func main() {
 	r := gin.Default()
+
 	repo := repository.NewInMemoryOrderRepo()
 	uc := usecase.NewOrderUsecase(repo)
 	handler.NewOrderHandler(r, uc)
 
-	r.Run(":8080") // Run on port 8080
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "🛒 Order Service Running"})
+	})
+
+	r.Run(":8080")
 }

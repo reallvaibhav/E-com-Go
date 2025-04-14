@@ -1,25 +1,28 @@
-version: '3.8'
-
 services:
-  order-service:
+  order_service:              # Use underscores instead of hyphens
     build:
-      context: .  # Build from the project root
-      dockerfile: order-service/Dockerfile
+      context: ./order-service
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    env_file:
-      - .env  # Load environment variables
     networks:
       - my-network
 
-  inventory-service:
+  inventory_service:          # Underscore for service name
     build:
-      context: .
-      dockerfile: inventory-service/Dockerfile
+      context: ./inventory-service
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
-    env_file:
-      - .env
+    networks:
+      - my-network
+
+  api_gateway:                # Underscore for service name
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
     networks:
       - my-network
 

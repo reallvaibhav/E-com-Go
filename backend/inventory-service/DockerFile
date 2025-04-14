@@ -1,21 +1,21 @@
-# Use the same Golang base image
-FROM golang:1.23.0
+FROM golang:1.24.1
 
-# Set working directory in the container
 WORKDIR /app
 
-# Copy dependency files first (for layer caching)
-COPY ./inventory-service/go.mod .
+# Copy go.mod and go.sum to leverage Docker layer caching
+COPY go.mod go.sum ./
+
+# Download dependencies
 RUN go mod download
 
-# Copy the entire inventory-service code
-COPY ./inventory-service/ .
+# Copy the entire project
+COPY . .
 
-# Build the Go application
-RUN go build -o main .
+# Build the binary from the main.go inside cmd/
+RUN go build -o inventory-service ./cmd
 
-# Expose the port used by the inventory service
+# Expose the service port (change if your app listens on another)
 EXPOSE 8081
 
-# Command to run the application
+# Run the service
 CMD ["./inventory-service"]
