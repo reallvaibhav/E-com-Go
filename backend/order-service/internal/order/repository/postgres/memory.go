@@ -3,7 +3,7 @@ package repository
 import (
 	"sync"
 
-	"github.com/reallvaibhav/E-com-Go/backend/order-service/internal/order/usecase"
+	"order-service/internal/order/usecase"
 )
 
 type inMemoryRepo struct {
