@@ -1,4 +1,5 @@
-// internal/order/usecase/usecase.go
+
+
 package usecase
 
 type Order struct {
