@@ -1,12 +1,11 @@
-# Example: order-service/Dockerfile
-FROM golang:1.22-alpine AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN go build -o order-service ./cmd  # Build from cmd directory
+FROM golang:1.22.1-alpine AS builder  
+WORKDIR /app  
+COPY go.mod go.sum ./  
+RUN go mod download  
+COPY . .  
+RUN go build -o order-service ./cmd  
 
-FROM alpine:latest
-WORKDIR /app
-COPY --from=builder /app/order-service .
-CMD ["./order-service"]
+FROM alpine:latest  
+WORKDIR /app  
+COPY --from=builder /app/order-service .  
+CMD ["./order-service"]  

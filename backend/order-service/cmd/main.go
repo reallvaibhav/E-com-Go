@@ -10,13 +10,16 @@ import (
 func main() {
 	r := gin.Default()
 
+	// Initialize dependencies
 	repo := repository.NewInMemoryOrderRepo()
 	uc := usecase.NewOrderUsecase(repo)
 	handler.NewOrderHandler(r, uc)
 
+	// Health check endpoint
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "🛒 Order Service Running"})
 	})
 
+	// Start server
 	r.Run(":8080")
 }

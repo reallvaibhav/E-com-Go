@@ -1,48 +1,55 @@
 package repository
 
 import (
-	"order-service/internal/order"
 	"sync"
+
+	"github.com/reallvaibhav/E-com-Go/backend/order-service/internal/order/usecase"
 )
 
-type InMemoryOrderRepo struct {
-	orders map[string]order.Order
-	mu     sync.RWMutex
+type inMemoryRepo struct {
+	data map[string]usecase.Order
+	mu   sync.RWMutex
 }
 
-func NewInMemoryOrderRepo() *InMemoryOrderRepo {
-	return &InMemoryOrderRepo{
-		orders: make(map[string]order.Order),
+func NewInMemoryOrderRepo() usecase.OrderRepo {
+	return &inMemoryRepo{
+		data: make(map[string]usecase.Order),
 	}
 }
 
-func (r *InMemoryOrderRepo) Save(o order.Order) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	r.orders[o.ID] = o
-	return nil
-}
-
-func (r *InMemoryOrderRepo) FindByID(id string) (order.Order, bool) {
+func (r *inMemoryRepo) FetchAll() []usecase.Order {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	o, exists := r.orders[id]
-	return o, exists
-}
 
-func (r *InMemoryOrderRepo) Update(id string, updated order.Order) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	r.orders[id] = updated
-	return nil
-}
-
-func (r *InMemoryOrderRepo) List() []order.Order {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	var list []order.Order
-	for _, o := range r.orders {
-		list = append(list, o)
+	orders := make([]usecase.Order, 0, len(r.data))
+	for _, order := range r.data {
+		orders = append(orders, order)
 	}
-	return list
+	return orders
+}
+
+func (r *inMemoryRepo) FetchByID(id string) (usecase.Order, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	order, exists := r.data[id]
+	return order, exists
+}
+
+func (r *inMemoryRepo) Save(order usecase.Order) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	r.data[order.ID] = order
+}
+
+func (r *inMemoryRepo) Remove(id string) bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if _, exists := r.data[id]; !exists {
+		return false
+	}
+	delete(r.data, id)
+	return true
 }
