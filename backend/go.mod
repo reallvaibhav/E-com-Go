@@ -1,10 +1,10 @@
-module github.com/reallvaibhav/E-com-Go/backend/inventory-service
+module github.com/reallvaibhav/E-com-Go
 
-go 1.24.1
+go 1.22
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/gorilla/mux v1.8.1
+	github.com/google/uuid v1.6.0
 )
 
 require (
