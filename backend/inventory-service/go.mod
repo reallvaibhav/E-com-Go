@@ -2,10 +2,7 @@ module github.com/reallvaibhav/E-com-Go
 
 go 1.22
 
-require (
-	github.com/gin-gonic/gin v1.10.0
-	github.com/google/uuid v1.6.0
-)
+require github.com/gin-gonic/gin v1.10.0
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
