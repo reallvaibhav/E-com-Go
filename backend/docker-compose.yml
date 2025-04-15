@@ -15,7 +15,7 @@ services:
     build:
       context: ./inventory-service
     ports:
-      - "8002:8080"
+      - "8002:8081"
     networks:
       - backend
 

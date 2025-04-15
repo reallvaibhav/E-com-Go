@@ -1,34 +1,15 @@
-# Use Golang base image to build the service
-FROM golang:1.20-alpine as builder
+FROM golang:1.20
 
-# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod tidy
-
-# Copy the source code into the container
 COPY . .
 
-# Build the Go app
-RUN go build -o order-service .
+RUN go build -o order-service ./main.go
 
-# Start a new stage from scratch to copy only the binary and smaller dependencies
-FROM alpine:latest  
+EXPOSE 8081
 
-WORKDIR /root/
-
-# Install necessary dependencies to run the binary
-RUN apk --no-cache add ca-certificates
-
-# Copy the Pre-built binary from the builder stage
-COPY --from=builder /app/order-service .
-
-# Expose port 8080 to be accessible from outside the container
-EXPOSE 8080
-
-# Command to run the executable
 CMD ["./order-service"]
