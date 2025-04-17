@@ -33,7 +33,7 @@ func main() {
 	// Proxy: Order Service
 	orderProxy := createReverseProxy(orderService)
 	r.Any("/orders/*proxyPath", func(c *gin.Context) {
-		c.Request.URL.Path = c.Param("proxyPath")
+		c.Request.URL.Path = "/orders" + c.Param("proxyPath")
 		orderProxy.ServeHTTP(c.Writer, c.Request)
 	})
 
